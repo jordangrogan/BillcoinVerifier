@@ -23,7 +23,7 @@ class Verifier
   end
 
   # This currently separates the actual transaction data portion of the line
-  # so that the totals for each person can be calculated 
+  # so that the totals for each person can be calculated
   @transactionData.each do |splitData|
     count = 1
     splitData.each do |splitLine|

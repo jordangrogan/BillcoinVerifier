@@ -6,8 +6,9 @@ class UserList
     @user_cache = {} # create new hashmap to hold name cache
   end
 
-  def addUser user
-    @user_list.push(user)
+  def addUser user, start
+    new_user = User.new(user,start)
+    @user_list.push(new_user)
     @user_cache[user] = 1 # just adding a simple 1 to signify existence
   end
 

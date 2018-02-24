@@ -1,3 +1,5 @@
+require_relative "user_list"
+
 # method to verify block numbers are in order
 def verifyLineOrder lineNums
   oldVal = -1
@@ -10,7 +12,9 @@ def verifyLineOrder lineNums
   return true
 end
 
-def gatherTransactionData data
+# This currently separates the actual transaction data portion of the line
+# so that the totals for each person can be calculated
+def gatherTransactionData data, list
   @transactionData.each do |splitData|
     count = 1
     splitData.each do |splitLine|
@@ -21,10 +25,13 @@ def gatherTransactionData data
         loop do
           #puts splitLine
           stripstring = splitLine[@transactionRegex]
-          puts stripstring
+
           unless stripstring.eql? nil
+            puts " #{tGetFirst stripstring} is giving #{tGetSecond stripstring} #{tGetAmt stripstring} billcoins "
+            # ready to start populating here
             splitLine = splitLine[stripstring.length-1,splitLine.length]
           end
+
           break if stripstring.eql? nil
         end
 
@@ -57,6 +64,8 @@ class Verifier
   @lineNums = []
   @transactionData = []
   @transactionRegex = /[A-Z]*[a-z]*(>)[A-Z]*[a-z]*[\(][0-9]*[\)][\:]*/
+  @user_list = UserList.new()
+
   # main loop going through each line of file
   File.open("sample.txt").each do |line|
     currLine =  line.to_s
@@ -64,10 +73,8 @@ class Verifier
     @lineNums.push(currLine[0])
   end
 
-  # This currently separates the actual transaction data portion of the line
-  # so that the totals for each person can be calculated
-  # Once working this will be moved to a function
-  gatherTransactionData @transactionData
+
+  gatherTransactionData @transactionData, @user_list
 
   if verifyLineOrder(@lineNums)
     puts "block line check passed"

@@ -10,6 +10,29 @@ def verifyLineOrder lineNums
   return true
 end
 
+def gatherTransactionData data
+  @transactionData.each do |splitData|
+    count = 1
+    splitData.each do |splitLine|
+
+      if(count == 3)
+        # SHOULD LOOP HERE
+        #puts stripstring
+        loop do
+          #puts splitLine
+          stripstring = splitLine[@transactionRegex]
+          puts stripstring
+          unless stripstring.eql? nil
+            splitLine = splitLine[stripstring.length-1,splitLine.length]
+          end
+          break if stripstring.eql? nil
+        end
+
+      end
+      count +=1;
+    end
+  end
+end
 # This function takes a transaction string in the format of USER1>USER2(NUMBILLCOINS)
 # This function will return the name of USER1, the USER sending billcoins
 def tGetFirst t_string
@@ -44,20 +67,7 @@ class Verifier
   # This currently separates the actual transaction data portion of the line
   # so that the totals for each person can be calculated
   # Once working this will be moved to a function
-  @transactionData.each do |splitData|
-    count = 1
-    splitData.each do |splitLine|
-
-      if(count == 3)
-          # SHOULD LOOP HERE
-          #puts stripstring
-          #stripstring = splitLine[@transactionRegex]
-          #splitLine = splitLine[stripstring.length-1,splitLine.length]
-
-      end
-      count +=1;
-    end
-  end
+  gatherTransactionData @transactionData
 
   if verifyLineOrder(@lineNums)
     puts "block line check passed"

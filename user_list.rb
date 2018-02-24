@@ -8,7 +8,7 @@ class UserList
 
   def addUser user
     @user_list.push(user)
-    @user_cache[user] = 1
+    @user_cache[user] = 1 # just adding a simple 1 to signify existence
   end
 
   # This method will return whether a use exists in the system

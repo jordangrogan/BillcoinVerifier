@@ -2,16 +2,20 @@
 # The user will have a name and a number of Billcoins associated with them
 class User
   attr_accessor :@numCoins, :@name
-  def initialize name
+  def initialize name, start_amt
     @name = name
-    @numCoins = 0
+    @num_coins = start_amt
   end
 
   def setCoins num
-    @numCoins = num
+    @num_coins = num
   end
 
   def addCoins num
-    @numCoins+=num;
+    @num_coins += num;
+  end
+
+  def removeCoins num
+    @num_coins -= num;
   end
 end

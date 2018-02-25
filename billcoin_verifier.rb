@@ -3,12 +3,14 @@ require_relative "user_list"
 
 class BillcoinVerifier
 
-  attr_accessor :blocks
+  attr_accessor :blocks, :user_list
 
-  @user_list = UserList::new
-  @blocks = []
+  def initialize
+    @user_list = UserList::new
+    @blocks = []
+  end
 
-  def open_file(input_file)
+  def verify(input_file)
 
     File.open(input_file, "r").each_line do |line|
       block_split = line.chomp.split("|")
@@ -16,18 +18,16 @@ class BillcoinVerifier
       @blocks << block
     end
 
-  end
-
-  def run_verifications
-
     gather_transaction_data
 
     if !verify_line_order
       puts "BLOCKCHAIN INVALID"
+      return
     end
 
     if !verify_hash
       puts "BLOCKCHAIN INVALID"
+      return
     end
 
   end

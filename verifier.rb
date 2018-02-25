@@ -19,6 +19,10 @@ class Verifier
       puts "BLOCKCHAIN INVALID"
     end
 
+    if !verify_hash
+      puts "BLOCKCHAIN INVALID"
+    end
+
   end
 
   # This currently separates the actual transaction data portion of the line
@@ -33,7 +37,7 @@ class Verifier
         stripstring = splitLine[/[A-Z]*[a-z]*(>)[A-Z]*[a-z]*[\(][0-9]*[\)][\:]*/]
 
         unless stripstring.eql? nil
-          puts " #{t_from(stripstring)} is giving #{t_to(stripstring)} #{t_amt(stripstring)} billcoins "
+          #puts " #{t_from(stripstring)} is giving #{t_to(stripstring)} #{t_amt(stripstring)} billcoins "
           # ready to start populating here
           splitLine = splitLine[stripstring.length-1,splitLine.length]
         end
@@ -76,6 +80,28 @@ class Verifier
       i += 1
     end
     true
+  end
+
+  def verify_hash
+    @blocks.each do |block|
+      aggregated_string = "#{block.number}|#{block.hash_prev_block}|#{block.transactions}|#{block.timestamp}"
+      hashed_string = hash(aggregated_string)
+      if block.hash_this_block != hashed_string
+        puts "Line #{block.number}: String '#{aggregated_string}' hash set to #{block.hash_this_block}, should be #{hashed_string}"
+        return false
+      end
+      true
+    end
+  end
+
+  def hash string
+    val = 0
+    utf_8_characters = string.unpack('U*')
+    utf_8_characters.each do |x|
+      val += (x ** 2000) * ((x + 2) ** 21) - ((x + 5) ** 3)
+    end
+    val %= 65536
+    val.to_s(16)
   end
 
 end

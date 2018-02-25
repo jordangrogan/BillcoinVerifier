@@ -15,10 +15,8 @@ class Verifier
 
     gather_transaction_data
 
-    if verify_line_order
-      puts "block line check passed"
-    else
-      puts "block line check failed"
+    if !verify_line_order
+      puts "BLOCKCHAIN INVALID"
     end
 
   end
@@ -68,15 +66,16 @@ class Verifier
 
   # method to verify block numbers are in order
   def verify_line_order
-    old_val = -1
+    i = 0
     @blocks.each do |block|
       line_num = block.number
-      if line_num.to_i < old_val
+      if line_num.to_i != i
+        puts "Line #{i}: Invalid block number #{line_num}, should be #{i}"
         return false
       end
-      old_val = line_num.to_i
+      i += 1
     end
-    return true
+    true
   end
 
 end

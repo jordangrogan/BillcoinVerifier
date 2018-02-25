@@ -83,13 +83,23 @@ class Verifier
   end
 
   def verify_hash
+    hashed_string = "0"
     @blocks.each do |block|
+
+      # Check previous hash
+      if hashed_string != block.hash_prev_block
+        puts "Line #{block.number}: Previous hash was #{block.hash_prev_block}, should be #{hashed_string}"
+        return false
+      end
+
+      # Check this block's hash
       interpolated_string = "#{block.number}|#{block.hash_prev_block}|#{block.transactions}|#{block.timestamp}"
       hashed_string = hash(interpolated_string)
       if block.hash_this_block != hashed_string
         puts "Line #{block.number}: String '#{interpolated_string}' hash set to #{block.hash_this_block}, should be #{hashed_string}"
         return false
       end
+
       true
     end
   end

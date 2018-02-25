@@ -84,10 +84,10 @@ class Verifier
 
   def verify_hash
     @blocks.each do |block|
-      aggregated_string = "#{block.number}|#{block.hash_prev_block}|#{block.transactions}|#{block.timestamp}"
-      hashed_string = hash(aggregated_string)
+      interpolated_string = "#{block.number}|#{block.hash_prev_block}|#{block.transactions}|#{block.timestamp}"
+      hashed_string = hash(interpolated_string)
       if block.hash_this_block != hashed_string
-        puts "Line #{block.number}: String '#{aggregated_string}' hash set to #{block.hash_this_block}, should be #{hashed_string}"
+        puts "Line #{block.number}: String '#{interpolated_string}' hash set to #{block.hash_this_block}, should be #{hashed_string}"
         return false
       end
       true

@@ -6,7 +6,7 @@ class UserList
     @user_cache = {} # create new hashmap to hold name cache
   end
 
-  def addUser user, start
+  def add_user user, start
     new_user = User.new(user,start)
     @user_list.push(new_user)
     @user_cache[user] = 1 # just adding a simple 1 to signify existence
@@ -14,7 +14,7 @@ class UserList
 
   # This method will return whether a use exists in the system
   # Uses user cache to get a constant lookup time
-  def userExist? username
+  def user_exist? username
     if @user_cache.has_key? username
       return true
     end

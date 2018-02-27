@@ -18,7 +18,7 @@ class BillcoinVerifierTest < Minitest::Test
     block3 = Minitest::Mock::new("block3")
     def block3.number; 3; end
     @v.blocks = [block0, block1, block2, block3]
-    assert_equal @v.verify_line_order, true
+    assert @v.verify_line_order
   end
 
   def test_verify_line_order_out_of_order

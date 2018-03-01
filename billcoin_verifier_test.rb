@@ -8,6 +8,26 @@ class BillcoinVerifierTest < Minitest::Test
     @v = BillcoinVerifier::new()
   end
 
+  # TODO: UNIT TEST FOR gather_transaction_data
+
+  # UNIT TEST FOR t_from
+  # A string in the format "USER1>USER2(###)" returns "USER1"
+  def test_t_from
+    assert_equal @v.t_from("Ross>Monica(100)"), "Ross"
+  end
+
+  # UNIT TEST FOR t_to
+  # A string in the format "USER1>USER2(###)" returns "USER2"
+  def test_t_to
+    assert_equal @v.t_to("Chandler>Phoebe(100)"), "Phoebe"
+  end
+
+  # UNIT TEST FOR t_amt
+  # A string in the format "USER1>USER2(###)" returns "###"
+  def test_t_amt
+    assert_equal @v.t_amt("Rachel>Joey(100)"), "100"
+  end
+
   # UNIT TESTS FOR verify_line_order
   # Blocks in order     --> returns true
   # Blocks out of order --> returns false & outputs issue

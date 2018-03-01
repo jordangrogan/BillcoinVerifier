@@ -60,19 +60,21 @@ class BillcoinVerifier
   # This function will return the name of USER1, the USER sending billcoins
   def t_from t_string
     first = t_string[/[A-Z]*[a-z]*(>)/]
-    return first.chop
+    first.chop
   end
+
   # This function takes a transaction string in the format of USER1>USER2(NUMBILLCOINS)
   # This function will return the name of USER2, the USER receiving billcoins
   def t_to t_string
     second = t_string[/(>)[A-Z]*[a-z]*/]
-    return second[1,second.length]
+    second[1,second.length-1]
   end
+
   # This function takes a transaction string in the format of USER1>USER2(NUMBILLCOINS)
   # This function will return the amount of billcoins transfered in this transaction
   def t_amt t_string
     amt = t_string[/[\(][0-9]*[\)]/]
-    return amt[1,amt.length-2]
+    amt[1,amt.length-2]
   end
 
   # method to verify block numbers are in order

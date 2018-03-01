@@ -160,7 +160,7 @@ class BillcoinVerifierTest < Minitest::Test
   end
 
   # This ensures return false and issue is outputted when the seconds of
-  # a previous block are greater than the seconds of the current block
+  # a previous block is greater than the seconds of the current block
   def test_verify_timestamp_prev_block_seconds_greater
     block0 = Minitest::Mock::new("block0")
     def block0.number; 0; end
@@ -181,7 +181,7 @@ class BillcoinVerifierTest < Minitest::Test
 
   # This ensures return false and issue is outputted when the seconds of
   # a previous block are equal to the seconds of the current block, but
-  # the nanoseconds of the previous block are greater
+  # the nanoseconds of the previous block is greater
   def test_verify_timestamp_prev_block_seconds_equal_nanoseconds_greater
     block0 = Minitest::Mock::new("block0")
     def block0.number; 0; end

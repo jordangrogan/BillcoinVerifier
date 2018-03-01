@@ -141,7 +141,7 @@ class BillcoinVerifierTest < Minitest::Test
     refute @v.verify_hash
   end
 
-  # TODO: UNIT TESTS for verify_timestamp
+  # UNIT TESTS for verify_timestamp
   # On success --> returns true
   # On failure --> outputs issue & returns false
 

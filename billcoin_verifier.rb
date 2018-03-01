@@ -20,6 +20,11 @@ class BillcoinVerifier
 
     gather_transaction_data
 
+    if !verify_timestamp
+      puts "BLOCKCHAIN INVALID"
+      return
+    end
+
     if !verify_line_order
       puts "BLOCKCHAIN INVALID"
       return
@@ -29,7 +34,7 @@ class BillcoinVerifier
       puts "BLOCKCHAIN INVALID"
       return
     end
-
+    
   end
 
   # This currently separates the actual transaction data portion of the line
@@ -109,8 +114,8 @@ class BillcoinVerifier
         return false
       end
 
-      true
     end
+    true
   end
 
   def hash string
@@ -121,6 +126,38 @@ class BillcoinVerifier
     end
     val %= 65536
     val.to_s(16)
+  end
+
+  def verify_timestamp
+    last_block_seconds = -1
+    last_block_nanoseconds = -1
+    @blocks.each do |block|
+
+      this_block_seconds = get_timestamp_seconds(block.timestamp).to_i
+      this_block_nanoseconds = get_timestamp_nanoseconds(block.timestamp).to_i
+
+      # If last block's seconds > this block's seconds, return false
+      # Or, if they equal, then check to see if last block's NANOseconds > this block's NANOseconds, if so, return false
+      if (last_block_seconds > this_block_seconds) || ((last_block_seconds == this_block_seconds) && (last_block_nanoseconds >= this_block_nanoseconds))
+        puts "Line #{block.number}: Previous timestamp #{last_block_seconds}.#{last_block_nanoseconds} >= new timestamp #{block.timestamp}"
+        return false
+      end
+
+      last_block_seconds = this_block_seconds
+      last_block_nanoseconds = this_block_nanoseconds
+
+    end
+    true
+  end
+
+  def get_timestamp_seconds timestamp
+    timestamp[/[0-9]*(\.)/].chop
+  end
+
+  def get_timestamp_nanoseconds timestamp
+    nanoseconds = timestamp[/(\.)[0-9]*/]
+    nanoseconds = nanoseconds[1, nanoseconds.length-1]
+    nanoseconds
   end
 
 end

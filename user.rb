@@ -9,4 +9,12 @@ class User
     @num_coins = start_amt
   end
 
+  def negative_balance?
+    if num_coins < 0
+      true
+    else
+      false
+    end
+  end
+
 end

@@ -18,7 +18,10 @@ class BillcoinVerifier
       @blocks << block
     end
 
-    gather_transaction_data
+    if !verify_transaction_data
+      puts "BLOCKCHAIN INVALID"
+      return
+    end
 
     if !verify_timestamp
       puts "BLOCKCHAIN INVALID"
@@ -34,27 +37,59 @@ class BillcoinVerifier
       puts "BLOCKCHAIN INVALID"
       return
     end
-    
+
+    @user_list.output_transaction_data
+
   end
 
   # This currently separates the actual transaction data portion of the line
   # so that the totals for each person can be calculated
-  def gather_transaction_data
+  def verify_transaction_data
 
     @blocks.each do |block|
 
-      splitLine = block.transactions
+      block_transactions = block.transactions
+      block_users = []
 
-      loop do
-        stripstring = splitLine[/[A-Z]*[a-z]*(>)[A-Z]*[a-z]*[\(][0-9]*[\)][\:]*/]
+      block_transactions.split(":").each do |transaction|
 
-        unless stripstring.eql? nil
-          #puts " #{t_from(stripstring)} is giving #{t_to(stripstring)} #{t_amt(stripstring)} billcoins "
-          # ready to start populating here
-          splitLine = splitLine[stripstring.length-1,splitLine.length]
+        from = t_from(transaction)
+        to = t_to(transaction)
+        amt = t_amt(transaction).to_i
+
+        if(from != "SYSTEM")
+
+          if !@user_list.user_exist?(from)
+            from = @user_list.add_user(from, 0)
+          else
+            from = @user_list.find_user(from)
+          end
+
+          from.num_coins -= amt
+
+          block_users << from
+
         end
 
-        break if stripstring.eql? nil
+        if !@user_list.user_exist?(to)
+          to = @user_list.add_user(to, 0)
+        else
+          to = @user_list.find_user(to)
+        end
+
+        to.num_coins += amt
+
+        block_users << to
+
+      end
+
+      block_users.each do |user|
+
+        if user.negative_balance?
+          puts "Line #{block.number}: Invalid block, address #{user.name} has #{user.num_coins} billcoins!"
+          return false
+        end
+
       end
 
     end

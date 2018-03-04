@@ -10,6 +10,7 @@ class UserList
     new_user = User.new(user,start)
     @user_list.push(new_user)
     @user_cache[user] = 1 # just adding a simple 1 to signify existence
+    new_user
   end
 
   # This method will return whether a use exists in the system
@@ -19,6 +20,20 @@ class UserList
       return true
     end
     return false
+  end
+
+  def find_user username
+    @user_list.each do |user|
+      if user.name == username
+        return user
+      end
+    end
+  end
+
+  def output_transaction_data
+    @user_list.each do |user|
+      puts "#{user.name}: #{user.num_coins} billcoins"
+    end
   end
 
 end

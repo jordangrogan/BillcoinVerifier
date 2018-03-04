@@ -8,8 +8,8 @@ class UserList
 
   def add_user user, start
     new_user = User.new(user,start)
-    @user_list.push(new_user)
-    @user_cache[user] = 1 # just adding a simple 1 to signify existence
+    @user_list << new_user
+    @user_cache[user] = @user_list.size - 1 # the value is the index in the @user_list array
     new_user
   end
 
@@ -23,11 +23,7 @@ class UserList
   end
 
   def find_user username
-    @user_list.each do |user|
-      if user.name == username
-        return user
-      end
-    end
+    @user_list[@user_cache[username]]
   end
 
   def output_transaction_data

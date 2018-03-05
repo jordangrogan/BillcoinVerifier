@@ -42,8 +42,8 @@ class BillcoinVerifier
 
   end
 
-  # This currently separates the actual transaction data portion of the line
-  # so that the totals for each person can be calculated
+  # Generates users & their transaction data
+  # Verifies that at each block, the users don't have a negative balance
   def verify_transaction_data
 
     @blocks.each do |block|
@@ -51,12 +51,14 @@ class BillcoinVerifier
       block_transactions = block.transactions
       block_users = []
 
+      # Loop through each transaction
       block_transactions.split(":").each do |transaction|
 
         from = t_from(transaction)
         to = t_to(transaction)
         amt = t_amt(transaction).to_i
 
+        # If it's from the system, ignore adding SYSTEM to the @user_list or decreasing coins
         if(from != "SYSTEM")
 
           if !@user_list.user_exist?(from)
@@ -83,6 +85,7 @@ class BillcoinVerifier
 
       end
 
+      # Check the users in this block for a negative balance
       block_users.each do |user|
 
         if user.negative_balance?

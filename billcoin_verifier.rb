@@ -58,6 +58,16 @@ class BillcoinVerifier
         to = t_to(transaction)
         amt = t_amt(transaction).to_i
 
+        if from.length > 6 || from.length < 1
+          puts "Line #{block.number}: Invalid block, address #{from} is not > 6 alphabetic characters."
+          return false
+        end
+
+        if to.length > 6 || to.length < 1
+          puts "Line #{block.number}: Invalid block, address #{to} is not > 6 alphabetic characters."
+          return false
+        end
+
         # If it's from the system, ignore adding SYSTEM to the @user_list or decreasing coins
         if(from != "SYSTEM")
 

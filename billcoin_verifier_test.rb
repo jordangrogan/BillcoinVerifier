@@ -8,8 +8,6 @@ class BillcoinVerifierTest < Minitest::Test
     @v = BillcoinVerifier::new()
   end
 
-  # TODO: UNIT TEST FOR gather_transaction_data
-
   # UNIT TEST FOR t_from
   # A string in the format "USER1>USER2(###)" returns "USER1"
   def test_t_from
